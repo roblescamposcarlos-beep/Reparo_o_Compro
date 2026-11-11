@@ -1,0 +1,72 @@
+{
+	"name": "ReparoCompro69",
+	"flow": [
+		{
+			"id": 1,
+			"module": "telegram:WatchUpdates",
+			"version": 1,
+			"parameters": { "__IMTHOOK__": 3050006 },
+			"mapper": {},
+			"metadata": {
+				"designer": { "x": 0, "y": 0 },
+				"parameters": [ { "name": "__IMTHOOK__", "type": "hook:telegramapi", "label": "Webhook", "required": true } ]
+			}
+		},
+		{
+			"id": 2,
+			"module": "ai-local-agent:RunLocalAIAgent",
+			"version": 0,
+			"tools": [],
+			"filter": {
+				"name": "Solo texto, sin comandos",
+				"conditions": [ [
+					{ "a": "{{1.message.text}}", "o": "exist" },
+					{ "a": "{{1.message.text}}", "b": "/", "o": "text:notstartwith" }
+				] ]
+			},
+			"parameters": { "makeConnectionId": 10844322 },
+			"mapper": {
+				"files": [],
+				"message": "Aparato y falla: {{1.message.text}}",
+				"threadId": "",
+				"outputType": "text",
+				"tokenLimit": "50",
+				"modelConfig": { "timeout": "", "recursionLimit": "300", "aiCompactionEnabled": true, "iterationsFromHistoryCount": "10" },
+				"defaultModel": "medium",
+				"systemPrompt": "Eres un asesor de reparacion de aparatos para alumnos de Desarrollo Sustentable del TecNM en Mazatlan, Sinaloa.\nEl usuario describe un aparato y su falla. Responde en texto plano (sin asteriscos, sin markdown), en espanol, con este formato, una linea por campo y sin lineas en blanco entre campos:\n\nAparato: [que es]\nCausa probable: [1 linea]\nTipo de obsolescencia: [planificada / percibida / ninguna, con 1 linea de explicacion]\n¿Tiene reparacion?: [si / no / depende]\nCosto aproximado de reparacion: [rango en pesos mexicanos]\nCosto aproximado de uno nuevo: [rango en pesos mexicanos]\nImpacto si se desecha: [materiales que contiene y por que contamina]\nRECOMENDACION: [REPARAR / REEMPLAZAR / DONAR O RECICLAR, con 1 linea de razon]\nQue hacer: [donde repararlo o a donde llevarlo si se desecha]\n\nReglas:\n- En Tipo de obsolescencia debes elegir exactamente UNA opcion: planificada, percibida o ninguna. No escribas \"depende\". Planificada si el producto esta disenado para fallar o no se puede reparar (bateria pegada, piezas selladas); percibida si funciona pero la publicidad o la moda lo hacen sentir viejo; ninguna si la falla es normal por uso o desgaste.\n- La RECOMENDACION debe ser coherente con los costos y con Tiene reparacion. Si tiene reparacion y el costo de reparar es menor a la mitad del costo de uno nuevo, recomienda REPARAR. Recomienda REEMPLAZAR solo si no tiene reparacion o si reparar cuesta mas de la mitad de uno nuevo. Recomienda DONAR O RECICLAR cuando el aparato ya no funciona y no vale la pena repararlo.\n- La razon de RECOMENDACION y el campo Que hacer deben coincidir con la opcion elegida: si recomiendas REPARAR, Que hacer indica donde repararlo; si recomiendas REEMPLAZAR, indica donde llevar el aparato viejo para reciclarlo.\n- En Que hacer recomienda tipos de negocio o lugares (taller de reparacion de ese aparato, centro de servicio de la marca, centro de acopio de residuos electronicos). No recomiendes escuelas ni instituciones educativas como lugares de reparacion.\n- En Impacto si se desecha menciona solo materiales que realmente contiene ese aparato; no afirmes contaminantes de los que no estes seguro.\n- Aclara que los costos son aproximados y que conviene pedir una cotizacion.\n\nSi el mensaje no describe un aparato con falla, responde: \"Describe el aparato y su falla, por ejemplo: laptop de 4 años que se calienta y se apaga.\"",
+				"promptCaching": "none",
+				"fallbackEnabled": false
+			},
+			"metadata": { "designer": { "x": 300, "y": 0 } }
+		},
+		{
+			"id": 3,
+			"module": "telegram:SendReplyMessage",
+			"version": 1,
+			"parameters": { "__IMTCONN__": 12267764 },
+			"mapper": {
+				"text": "{{2.response}}",
+				"chatId": "{{1.message.chat.id}}",
+				"parseMode": "",
+				"replyMarkup": "",
+				"messageThreadId": "",
+				"replyToMessageId": "",
+				"replyMarkupAssembleType": "reply_markup_enter"
+			},
+			"metadata": {
+				"designer": { "x": 600, "y": 0 },
+				"parameters": [ { "name": "__IMTCONN__", "type": "account:telegram", "label": "Connection", "required": true } ]
+			}
+		}
+	],
+	"metadata": {
+		"instant": true,
+		"version": 1,
+		"designer": { "orphans": [] },
+		"scenario": {
+			"dlq": false, "slots": null, "dataloss": false, "maxErrors": 3, "autoCommit": true,
+			"roundtrips": 1, "sequential": false, "confidential": false, "freshVariables": false,
+			"autoCommitTriggerLast": true
+		}
+	}
+}
