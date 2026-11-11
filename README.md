@@ -109,6 +109,12 @@ Consulté 3 casos en **Exvehl reparaciones**, un taller de Mazatlán. Después l
 - **Fechas distintas.** Las cotizaciones son de hace 1 mes, 6 meses y 14 meses; los precios pudieron cambiar. La más reciente y más comparable con lo que la IA estima hoy es la de los audífonos.
 - **La IA no vio el aparato:** solo recibió una descripción de una línea.
 
+## Video de la prueba en vivo
+
+[Ver la prueba en YouTube](https://youtu.be/ovaF8jgN9cM)
+
+El enlace también está en [`video/enlace.txt`](video/enlace.txt).
+
 ## 6. Preguntas de reflexión
 
 **1. ¿Cuántos de los 6 aparatos tenían reparación? ¿Cuántos se habrían desechado sin necesidad?**
